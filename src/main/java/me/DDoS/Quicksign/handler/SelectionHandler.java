@@ -273,6 +273,7 @@ public class SelectionHandler {
     public boolean checkForSelectionRights(Player player, Location location) {
 
         World world = location.getWorld();
+		boolean wgperm = false, residenceperm = false, regiosperm = false, lwcperm = false;
 
         if (wg == null && !residence && regiosAPI == null && lwc == null) {
 
@@ -291,23 +292,25 @@ public class SelectionHandler {
             if (plugin.hasPermissions(player, Permission.WG_MEMBER)
                     && checkForWGMembership(player, location, world)) {
 
-                return true;
+                wgperm = true;
 
             }
 
             if (plugin.hasPermissions(player, Permission.WG_OWNER)
                     && checkForWGOwnership(player, location, world)) {
 
-                return true;
+                wgperm = true;
 
             }
 
             if (plugin.hasPermissions(player, Permission.WG_CAN_BUILD)
                     && checkForWGBuildPermissions(player, location, world)) {
 
-                return true;
+                wgperm = true;
 
             }
+        } else {
+		wgperm = true;
         }
 
         if (residence) {
@@ -315,16 +318,18 @@ public class SelectionHandler {
             if (plugin.hasPermissions(player, Permission.RS_CAN_BUILD_FP)
                     && checkForResidencePerms(world, location, player, true)) {
 
-                return true;
+                residenceperm = true;
 
             }
 
             if (plugin.hasPermissions(player, Permission.RS_CAN_BUILD)
                     && checkForResidencePerms(world, location, player, false)) {
 
-                return true;
+                residenceperm = true;
 
             }
+        } else {
+		residenceperm = true;
         }
 
         if (regiosAPI != null) {
@@ -332,16 +337,18 @@ public class SelectionHandler {
             if (plugin.hasPermissions(player, Permission.RE_CAN_BUILD_FP)
                     && checkForRegiosPerms(player, true)) {
 
-                return true;
+                regiosperm = true;
 
             }
 
             if (plugin.hasPermissions(player, Permission.RE_CAN_BUILD)
                     && checkForRegiosPerms(player, false)) {
 
-                return true;
+                regiosperm = true;
 
             }
+        } else {
+		regiosperm = true;
         }
 
         if (lwc != null) {
@@ -349,19 +356,21 @@ public class SelectionHandler {
             if (plugin.hasPermissions(player, Permission.LWC_CAN_ACCESS_FP)
                     && checkForLWCPerms(player, location, true)) {
 
-                return true;
+                lwcperm = true;
 
             }
 
             if (plugin.hasPermissions(player, Permission.LWC_CAN_ACCESS)
                     && checkForLWCPerms(player, location, false)) {
 
-                return true;
+                lwcperm = true;
 
             }
+        } else {
+		lwcperm = true;
         }
 
-        return false;
+        return wgperm && residenceperm && regiosperm && lwcperm;
 
     }
 
